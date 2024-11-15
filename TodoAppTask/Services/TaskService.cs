@@ -15,14 +15,31 @@ namespace TodoAppTask.Services
 
         public Task GetById(int id) => _tasks.FirstOrDefault(t => t.Id == id);
 
-        public Task Add(Task task) 
-        { 
-          task.Id = _nextId++;
-          task.CreatedAt = DateTime.Now;
+        public Task Add(Task task)
+        {
+            task.Id = _nextId++;
+            task.CreatedAt = DateTime.Now;
             _tasks.Add(task);
             return task;
+        }
 
+        public bool Update(int id, Task updatedTask)
+        {
+            var task = GetById(id);
+            if (task == null) return false;
 
+            task.Title = updatedTask.Title;
+            task.IsCompleted = updatedTask.IsCompleted;
+            return true;
+        }
+
+        public bool Delete(int id)
+        {
+            var task = GetById(id);
+            if (task == null) return false;
+
+            _tasks.Remove(task);
+            return true;
         }
     }
 }
